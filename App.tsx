@@ -8,7 +8,7 @@ import Examples, { examples } from "./src/Examples";
 import ClockValuesAndIdentities from "./src/ClockValuesAndIdentities/boilerplate";
 import Transitions from "./src/Transitions/boilerplate/index";
 import UseTransition from "./src/UseTransition/boilerplate/index";
-import Timing from "./src/Timing";
+import Timing from "./src/Timing/boilerplate/index";
 import PanGesture from "./src/PanGesture";
 import Decay from "./src/Decay";
 import Spring from "./src/Spring";

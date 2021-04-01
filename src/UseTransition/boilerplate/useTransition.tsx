@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
-import Animated, {not, multiply, interpolate} from "react-native-reanimated";
+import Animated, {not, multiply, interpolate, Extrapolate} from "react-native-reanimated";
 
 import { Button, Card, cards, StyleGuide } from "../../components";
 import { useTransition } from 'react-native-redash';
@@ -35,7 +35,8 @@ const UseTransition = () => {
         }
         const rotate = multiply(direction, interpolate(transition, {
           inputRange: [0, 1],
-          outputRange: [0, Math.PI / 6]
+          outputRange: [0, Math.PI / 6],
+          extrapolate: Extrapolate.CLAMP
         }))
         return (
           <Animated.View key={card.id} style={[styles.overlay, {transform: [{ translateX: transformOrigin },{ rotate }, { translateX: -transformOrigin }]}]}>
