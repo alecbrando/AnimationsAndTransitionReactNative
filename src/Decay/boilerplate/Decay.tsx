@@ -58,11 +58,17 @@ const widthDecay = (
 }
 
 const Decay = () => {
+  //local state
   const state = new Value(State.UNDETERMINED);
+  // x position passed to gesture handler
   const translationX = new Value(0);
+  //y position passed to gesture handler
   const translationY = new Value(0);
+  //x velocity value passed to geture handler
   const velocityX = new Value(0)
+  //y velocity value passed to gesture handler
   const velocityY = new Value(0)
+  //gesture handler object that is passed to our gesture component that updates the gesture values
   const gestureHandler = onGestureEvent({
     state,
     translationX,
@@ -70,6 +76,12 @@ const Decay = () => {
     velocityX,
     velocityY
   });
+
+  //translate X and Y values that is diffClamp (the difference of values outside of the bounds so that we don't have to swipe a ton for it to be back in bounds... has min and max of window container)
+  //as well as widthDecay that takes in the translation X value that is updated by the gesture handler
+  //we pass our local state to communicate the gesture State
+  //offset is a default position we want our card to be
+  //velocity is passed so that we can use decay for the animation 
   const translateX = diffClamp(
     widthDecay(translationX, state, offsetX, velocityX),
     0,
