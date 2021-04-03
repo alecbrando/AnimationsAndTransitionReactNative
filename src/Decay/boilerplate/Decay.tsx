@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import Animated, { Value, cond, set, eq, add } from "react-native-reanimated";
+import Animated, { Value, cond, set, eq, add, block, Clock, and, neq, not, clockRunning, startClock, stopClock, decay } from "react-native-reanimated";
 import Constants from "expo-constants";
 import { diffClamp, onGestureEvent } from "react-native-redash";
 
@@ -22,36 +22,66 @@ const styles = StyleSheet.create({
 const [card] = cards;
 
 // TODO: replace with withOffset from redash
-const withOffset = (
+const widthDecay = (
   value: Animated.Node<number>,
-  state: Animated.Value<State>,
-  offset: Animated.Value<number> = new Value(0)
+  gestureState: Animated.Value<State>,
+  offset: Animated.Value<number> = new Value(0),
+  velocity: Animated.Value<number> = new Value(0)
 ) =>
-  cond(
-    eq(state, State.END),
-    [set(offset, add(offset, value)), offset],
-    add(offset, value)
-  );
+{
+  const clock = new Clock()
+  const state = {
+    finished: new Value(0),
+    velocity,
+    position: new Value(0),
+    time: new Value(0)
+  }
+  const config = {
+    deceleration: 0.998
+  }
+
+  const decayIsInterrupted = eq(gestureState, State.BEGAN)
+  const finishDecay = [
+    set(offset, state.position),
+    stopClock(clock)
+  ]
+
+
+  return block([
+    cond(decayIsInterrupted, finishDecay),
+    cond(neq(gestureState, State.END), [set(state.finished, 0), stopClock(clock), set(state.position, add(offset, value))]),
+    cond(eq(gestureState, State.END), 
+    [cond(and(not(clockRunning(clock)), not(state.finished)), 
+      [set(state.velocity, velocity), set(state.time, 0), startClock(clock)]), 
+    decay(clock, state, config)]),
+    state.position])
+}
 
 const Decay = () => {
   const state = new Value(State.UNDETERMINED);
   const translationX = new Value(0);
   const translationY = new Value(0);
+  const velocityX = new Value(0)
+  const velocityY = new Value(0)
   const gestureHandler = onGestureEvent({
     state,
     translationX,
     translationY,
+    velocityX,
+    velocityY
   });
   const translateX = diffClamp(
-    withOffset(translationX, state, offsetX),
+    widthDecay(translationX, state, offsetX, velocityX),
     0,
     containerWidth - CARD_WIDTH
   );
   const translateY = diffClamp(
-    withOffset(translationY, state, offsetY),
+    widthDecay(translationY, state, offsetY, velocityY),
     0,
     containerHeight - CARD_HEIGHT
   );
+
+
   return (
     <View style={styles.container}>
       <PanGestureHandler {...gestureHandler}>

@@ -37,14 +37,13 @@ const PanGesture = () => {
   const state = new Value(State.UNDETERMINED);
   const translationX = new Value(0);
   const translationY = new Value(0);
-  const velocityX = new Value(0);
-  const velocityY = new Value(0);
+  const offsetX = new Value((containerWidth - CARD_WIDTH) / 2)
+  const offsetY = new Value((containerWidth - CARD_HEIGHT) / 2)
+
   const gestureHandler = onGestureEvent({
     state,
     translationX,
     translationY,
-    velocityX,
-    velocityY,
   });
   const translateX = diffClamp(
     withOffset(translationX, state, offsetX),

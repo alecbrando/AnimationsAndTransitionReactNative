@@ -10,7 +10,7 @@ import Transitions from "./src/Transitions/boilerplate/index";
 import UseTransition from "./src/UseTransition/boilerplate/index";
 import Timing from "./src/Timing/boilerplate/index";
 import PanGesture from "./src/PanGesture/boilerplate/index";
-import Decay from "./src/Decay";
+import Decay from "./src/Decay/boilerplate/index";
 import Spring from "./src/Spring";
 import DynamicSpring from "./src/DynamicSpring";
 import DragToSort from "./src/DragToSort";

@@ -74,7 +74,7 @@ const withDecay = (config: WithDecayProps) => {
         startClock(clock),
       ]),
       reDecay(clock, decayState, { deceleration }),
-      cond(decayState.finished, finishDecay),
+      // cond(decayState.finished, finishDecay),
     ]),
     decayState.position,
   ]);
