@@ -14,7 +14,7 @@ import Decay from "./src/Decay/boilerplate/index";
 import Spring from "./src/Spring/boilerplate/index";
 import DynamicSpring from "./src/DynamicSpring";
 import DragToSort from "./src/DragToSort";
-import Swipe, { profiles } from "./src/Swipe";
+import Swipe, { profiles } from "./src/Swipe/boilerplate/index";
 import Svg from "./src/Svg";
 import Trigonometry from "./src/Trigonometry";
 import CircularSlider from "./src/CircularSlider";

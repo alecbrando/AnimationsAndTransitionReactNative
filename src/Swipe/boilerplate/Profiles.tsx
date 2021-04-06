@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import { SafeAreaView, StyleSheet, View, Dimensions } from "react-native";
+import Animated, {Value} from "react-native-reanimated";
 // eslint-disable-next-line import/order
 import { Feather as Icon } from "@expo/vector-icons";
 // import { useMemoOne } from "use-memo-one";
@@ -10,13 +10,13 @@ import { RectButton } from "react-native-gesture-handler";
 import { StyleGuide } from "../../components";
 
 import Card, { Profile } from "./Profile";
-// import Swipeable from "./Swipeable";
+import Swipeable from "./Swipeable";
 
-// const { width, height } = Dimensions.get("window");
-// const deltaX = width / 2;
-// const α = Math.PI / 12;
-// const A = Math.round(width * Math.cos(α) + height * Math.sin(α));
-// const snapPoints = [-A, 0, A];
+const { width, height } = Dimensions.get("window");
+const deltaX = width / 2;
+const α = Math.PI / 12;
+const A = Math.round(width * Math.cos(α) + height * Math.sin(α));
+const snapPoints = [-A, 0, A];
 
 const styles = StyleSheet.create({
   container: {
@@ -62,6 +62,9 @@ const Profiles = ({ profiles }: ProfilesProps) => {
   const [index, setIndex] = useState(0);
   const profile = profiles[index];
 
+  const translateX = new Value(0)
+  const translateY = new Value(0)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -72,10 +75,12 @@ const Profiles = ({ profiles }: ProfilesProps) => {
         <Animated.View
           style={{
             ...StyleSheet.absoluteFillObject,
+            transform: [{translateX}, {translateY}]
           }}
         >
           <Card {...{ profile }} />
         </Animated.View>
+        <Swipeable translateX={translateX} translateY={translateY} snapPoints={snapPoints} />
       </View>
       <View style={styles.footer}>
         <RectButton
